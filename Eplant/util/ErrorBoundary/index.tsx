@@ -1,14 +1,13 @@
-import React, { ErrorInfo } from 'react'
-export default class ErrorBoundary extends React.Component<
-  React.PropsWithChildren,
+import { Component, ErrorInfo, PropsWithChildren } from 'react'
+export default class ErrorBoundary extends Component<
+  PropsWithChildren,
   { hasError: boolean }
 > {
-  constructor(props: React.PropsWithChildren) {
+  constructor(props: PropsWithChildren) {
     super(props)
     this.state = { hasError: false }
   }
   componentDidCatch(error: Error, info: ErrorInfo) {
-    // console.log(error, info)
     this.setState({ hasError: true })
   }
   render() {

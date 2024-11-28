@@ -1,6 +1,7 @@
-import * as React from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { debounce } from 'lodash'
 
+import AddIcon from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import SearchIcon from '@mui/icons-material/Search'
 import { SxProps, Theme } from '@mui/material'
@@ -26,11 +27,11 @@ export default function SearchBar(props: {
   sx?: SxProps<Theme>
   inputProps?: TextFieldProps
 }) {
-  const [value, setValue] = React.useState<string[]>([])
-  const [inputValue, setInputValue] = React.useState<string>('')
-  const [options, setOptions] = React.useState<string[]>([])
-  const [focused, setFocused] = React.useState<boolean>(false)
-  const updateOptions = React.useRef<(text: string) => void>()
+  const [value, setValue] = useState<string[]>([])
+  const [inputValue, setInputValue] = useState<string>('')
+  const [options, setOptions] = useState<string[]>([])
+  const [focused, setFocused] = useState<boolean>(false)
+  const updateOptions = useRef<(text: string) => void>()
 
   function handleChange(input: string[]) {
     if (input.length > 0) {
@@ -41,15 +42,15 @@ export default function SearchBar(props: {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     updateOptions.current = debounce(async (newValue) => {
       const newoptions = await props.complete?.(newValue)
       setOptions(newoptions?.length ? newoptions : [])
     }, 100)
   }, [props.complete])
-  const id = React.useId()
+  const id = useId()
 
-  React.useEffect(() => {
+  useEffect(() => {
     updateOptions.current?.(inputValue)
   }, [inputValue])
 
@@ -118,7 +119,7 @@ export default function SearchBar(props: {
                     setValue([])
                   }}
                 >
-                  <SearchIcon />
+                  {value.length > 0 ? <AddIcon /> : <SearchIcon />}
                 </IconButton>
               </InputAdornment>
             ),
